@@ -1,8 +1,12 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useRef } from "react";
+import { createFileRoute, ClientOnly } from "@tanstack/react-router";
+import { lazy, Suspense, useRef } from "react";
 
 import { Legend } from "@/components/map/Legend";
-import { MapCanvas } from "@/components/map/MapCanvas";
+
+// Leaflet touches `window` at module scope, so the map is client-only.
+const MapCanvas = lazy(() =>
+  import("@/components/map/MapCanvas").then((m) => ({ default: m.MapCanvas })),
+);
 import { MapFilters } from "@/components/map/MapFilters";
 import { MapToolbar } from "@/components/map/MapToolbar";
 import { InfoPanel } from "@/components/panel/InfoPanel";
@@ -37,7 +41,11 @@ function MapPage() {
       <section className="flex min-w-0 flex-1 flex-col">
         <MapFilters />
         <div ref={containerRef} className="relative min-h-0 flex-1 bg-background">
-          <MapCanvas />
+          <ClientOnly>
+            <Suspense fallback={null}>
+              <MapCanvas />
+            </Suspense>
+          </ClientOnly>
           <div className="pointer-events-none absolute inset-0 z-500 p-3">
             <div className="absolute left-3 top-3">
               <MapToolbar containerRef={containerRef} />
