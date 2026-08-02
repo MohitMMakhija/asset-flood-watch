@@ -30,12 +30,23 @@ const typeOptions: (AssetKind | "all")[] = ["all", "substation", "ohl", "cable"]
 const riskOptions: (RiskLevel | "all")[] = ["all", "HIGH", "MEDIUM", "LOW"];
 
 function AssetsAtRiskPage() {
-  const { data, zoomToSelection } = useGis();
+  const { data, zoomToSelection, floodFilter, setFloodFilter } = useGis();
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [type, setType] = useState<AssetKind | "all">("all");
   const [risk, setRisk] = useState<RiskLevel | "all">("all");
   const [flood, setFlood] = useState("all");
+
+  // Drill-down from the map: pre-filter to the selected Flood Warning Area.
+  useEffect(() => {
+    if (floodFilter) setFlood(floodFilter.name);
+  }, [floodFilter]);
+
+  const clearFloodFilter = () => {
+    setFloodFilter(null);
+    setFlood("all");
+  };
+
 
   const atRisk = useMemo(() => {
     if (!data) return [];
