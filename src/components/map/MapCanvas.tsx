@@ -365,7 +365,7 @@ export function MapCanvas() {
     for (const id of markerIds) {
       const el = markerRefs.current.get(id)?.getElement()?.firstElementChild as HTMLElement | null;
       if (el) {
-        el.classList.add("gis-marker-pulse");
+        el.classList.add("is-pulsing");
         markerEls.push(el);
       }
     }
@@ -377,7 +377,7 @@ export function MapCanvas() {
         for (const b of bases) {
           b.path.setStyle({ weight: b.weight, opacity: b.opacity, fillOpacity: b.fillOpacity });
         }
-        for (const el of markerEls) el.classList.remove("gis-marker-pulse");
+        for (const el of markerEls) el.classList.remove("is-pulsing");
         return;
       }
       const wave = 0.5 + 0.5 * Math.sin((elapsed / 400) * Math.PI);
@@ -396,7 +396,7 @@ export function MapCanvas() {
       for (const b of bases) {
         b.path.setStyle({ weight: b.weight, opacity: b.opacity, fillOpacity: b.fillOpacity });
       }
-      for (const el of markerEls) el.classList.remove("gis-marker-pulse");
+      for (const el of markerEls) el.classList.remove("is-pulsing");
     };
   }, [selection, data]);
 
