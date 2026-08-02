@@ -140,9 +140,18 @@ export function MapCanvas() {
     Object.values(groupsRef.current).forEach((layer) => layer && map.removeLayer(layer));
     groupsRef.current = {};
     markerRefs.current.clear();
+    assetPathRefs.current.clear();
+    floodPathRefs.current.clear();
+
+    const register = (store: Map<string, L.Path[]>, id: string, layer: L.Layer) => {
+      const list = store.get(id);
+      if (list) list.push(layer as L.Path);
+      else store.set(id, [layer as L.Path]);
+    };
 
     const floodRenderer = L.canvas({ padding: 0.3 });
     const lineRenderer = L.canvas({ padding: 0.3 });
+
 
     const assetVisible = (props: AssetProperties) => {
       if (filters.assetType !== "all" && props.kind !== filters.assetType) return false;
