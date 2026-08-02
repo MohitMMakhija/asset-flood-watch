@@ -119,7 +119,10 @@ function AssetsAtRiskPage() {
         </select>
         <select
           value={flood}
-          onChange={(e) => setFlood(e.target.value)}
+          onChange={(e) => {
+            setFlood(e.target.value);
+            if (floodFilter) setFloodFilter(null);
+          }}
           className="h-8 max-w-56 rounded-sm border border-border bg-background px-2 text-[12.5px]"
         >
           {floodOptions.map((option) => (
@@ -129,6 +132,25 @@ function AssetsAtRiskPage() {
           ))}
         </select>
       </div>
+
+      {floodFilter && (
+        <div className="flex items-center gap-2 border-b border-primary/40 bg-primary/15 px-4 py-2 text-[12px]">
+          <Waves className="size-3.5 shrink-0 text-layer-flood" />
+          <span>
+            Showing affected assets for{" "}
+            <span className="font-semibold">{floodFilter.name}</span>
+          </span>
+          <button
+            onClick={clearFloodFilter}
+            className="ml-auto flex items-center gap-1 rounded-sm border border-border bg-chrome px-2 py-1 text-[11.5px] transition-colors hover:bg-accent"
+          >
+            <X className="size-3" />
+            Clear Filter
+          </button>
+        </div>
+      )}
+
+
 
       <div className="min-h-0 flex-1 overflow-auto">
         <table className="w-full border-collapse text-[12px]">
