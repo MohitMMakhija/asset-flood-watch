@@ -91,6 +91,10 @@ export function MapCanvas() {
     cable?: L.GeoJSON;
   }>({});
   const markerRefs = useRef<Map<string, L.Marker>>(new Map());
+  /** vector layers keyed by asset / flood id, used for the selection emphasis */
+  const assetPathRefs = useRef<Map<string, L.Path[]>>(new Map());
+  const floodPathRefs = useRef<Map<string, L.Path[]>>(new Map());
+
 
   /* ---------------------------------------------------------------- map init */
   useEffect(() => {
