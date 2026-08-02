@@ -115,6 +115,8 @@ export function GisProvider({ children }: { children: ReactNode }) {
       zoomToSelection,
       resetNonce,
       resetView,
+      floodFilter,
+      setFloodFilter,
     }),
     [
       data,
@@ -129,8 +131,10 @@ export function GisProvider({ children }: { children: ReactNode }) {
       zoomToSelection,
       resetNonce,
       resetView,
+      floodFilter,
     ],
   );
+
 
   return <GisContext.Provider value={value}>{children}</GisContext.Provider>;
 }
