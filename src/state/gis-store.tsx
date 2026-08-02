@@ -28,6 +28,12 @@ export interface Filters {
   risk: RiskLevel | "all";
 }
 
+/** Cross-page filter set from the map when drilling into a Flood Warning Area. */
+export interface FloodFilter {
+  id: string;
+  name: string;
+}
+
 interface GisContextValue {
   data: GisData | undefined;
   isLoading: boolean;
@@ -44,7 +50,10 @@ interface GisContextValue {
   zoomToSelection: (next: Selection) => void;
   resetNonce: number;
   resetView: () => void;
+  floodFilter: FloodFilter | null;
+  setFloodFilter: (next: FloodFilter | null) => void;
 }
+
 
 const GisContext = createContext<GisContextValue | null>(null);
 
