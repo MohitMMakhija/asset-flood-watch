@@ -53,6 +53,28 @@ function riskColour(p: Palette, risk: RiskLevel, kind: AssetKind) {
   return baseColour(p, kind);
 }
 
+/** Resolve a brighter variant of a theme colour to a canvas-safe rgb() string. */
+const brightCache = new Map<string, string>();
+function brighten(colour: string) {
+  const cached = brightCache.get(colour);
+  if (cached) return cached;
+  let out = colour;
+  if (typeof document !== "undefined") {
+    const probe = document.createElement("div");
+    probe.style.color = `color-mix(in oklab, ${colour} 62%, white)`;
+    document.body.appendChild(probe);
+    const computed = getComputedStyle(probe).color;
+    probe.remove();
+    if (computed) out = computed;
+  }
+  brightCache.set(colour, out);
+  return out;
+}
+
+/** ms the selection emphasis animation runs before settling to a static highlight */
+const PULSE_MS = 3000;
+
+
 export function MapCanvas() {
   const { data, layers, filters, selection, select, zoomNonce, resetNonce } = useGis();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -69,6 +91,10 @@ export function MapCanvas() {
     cable?: L.GeoJSON;
   }>({});
   const markerRefs = useRef<Map<string, L.Marker>>(new Map());
+  /** vector layers keyed by asset / flood id, used for the selection emphasis */
+  const assetPathRefs = useRef<Map<string, L.Path[]>>(new Map());
+  const floodPathRefs = useRef<Map<string, L.Path[]>>(new Map());
+
 
   /* ---------------------------------------------------------------- map init */
   useEffect(() => {
@@ -114,9 +140,18 @@ export function MapCanvas() {
     Object.values(groupsRef.current).forEach((layer) => layer && map.removeLayer(layer));
     groupsRef.current = {};
     markerRefs.current.clear();
+    assetPathRefs.current.clear();
+    floodPathRefs.current.clear();
+
+    const register = (store: Map<string, L.Path[]>, id: string, layer: L.Layer) => {
+      const list = store.get(id);
+      if (list) list.push(layer as L.Path);
+      else store.set(id, [layer as L.Path]);
+    };
 
     const floodRenderer = L.canvas({ padding: 0.3 });
     const lineRenderer = L.canvas({ padding: 0.3 });
+
 
     const assetVisible = (props: AssetProperties) => {
       if (filters.assetType !== "all" && props.kind !== filters.assetType) return false;
@@ -148,10 +183,10 @@ export function MapCanvas() {
       return {
         renderer: floodRenderer,
         color: highlight ? p.selected : p.flood,
-        weight: highlight ? 2 : 0.8,
+        weight: selected ? 3.5 : highlight ? 2 : 0.8,
         opacity: highlight ? 1 : 0.85,
         fillColor: p.flood,
-        fillOpacity: highlight ? 0.55 : 0.22,
+        fillOpacity: selected ? 0.5 : highlight ? 0.4 : 0.22,
       };
     };
 
@@ -161,11 +196,13 @@ export function MapCanvas() {
       const highlighted =
         !!props && (isSelectedAsset(props.id) || (affected?.has(props.id) ?? false));
       const risky = !!props && props.risk !== "SAFE";
+      const colour = props ? riskColour(p, props.risk, kind) : baseColour(p, kind);
       return {
         renderer: lineRenderer,
-        color: props ? riskColour(p, props.risk, kind) : baseColour(p, kind),
+        color: highlighted ? brighten(colour) : colour,
         weight: highlighted ? 5 : risky ? 2.4 : 1.4,
         opacity: highlighted ? 1 : 0.9,
+        dashArray: highlighted && kind === "ohl" ? "10 6" : undefined,
       };
     };
 
@@ -178,8 +215,8 @@ export function MapCanvas() {
       return {
         renderer: lineRenderer,
         color: highlighted ? p.selected : colour,
-        weight: highlighted ? 2.5 : 1.2,
-        fillColor: colour,
+        weight: highlighted ? 3 : 1.2,
+        fillColor: highlighted ? brighten(colour) : colour,
         fillOpacity: 0.5,
       };
     };
@@ -190,9 +227,11 @@ export function MapCanvas() {
     const flood = L.geoJSON(data.flood as never, {
       style: floodStyle as never,
       onEachFeature: (feature, layer) => {
+        register(floodPathRefs.current, feature.properties.id, layer);
         layer.on("click", () => select({ type: "flood", id: feature.properties.id }));
       },
     });
+
     groupsRef.current.flood = flood;
 
     /* substations — analysis uses the polygon footprint, markers are for display */
@@ -200,8 +239,10 @@ export function MapCanvas() {
       style: substationPolygonStyle as never,
       filter: (feature) => assetVisible((feature as AssetFeature).properties),
       onEachFeature: (feature, layer) => {
+        register(assetPathRefs.current, feature.properties.id, layer);
         layer.on("click", () => onFeatureClick(feature.properties.id));
       },
+
     });
     groupsRef.current.substationPolygons = substationPolygons;
 
@@ -229,6 +270,7 @@ export function MapCanvas() {
       style: lineStyle("ohl") as never,
       filter: (feature) => assetVisible((feature as AssetFeature).properties),
       onEachFeature: (feature, layer) => {
+        register(assetPathRefs.current, feature.properties.id, layer);
         layer.on("click", () => onFeatureClick(feature.properties.id));
       },
     });
@@ -238,11 +280,13 @@ export function MapCanvas() {
       style: lineStyle("cable") as never,
       filter: (feature) => assetVisible((feature as AssetFeature).properties),
       onEachFeature: (feature, layer) => {
+        register(assetPathRefs.current, feature.properties.id, layer);
         layer.on("click", () => onFeatureClick(feature.properties.id));
       },
     });
     groupsRef.current.cable = cable;
   }, [data, filters, select]);
+
 
   /* ------------------------------------------------------- layer visibility */
   useEffect(() => {
@@ -291,6 +335,71 @@ export function MapCanvas() {
       el.style.height = highlighted ? "15px" : "11px";
     }
   }, [selection, data]);
+
+  /* ------------------------------- temporary emphasis animation on selection */
+  useEffect(() => {
+    if (!selection || !data) return;
+
+    const targets: L.Path[] = [];
+    if (selection.type === "flood") {
+      targets.push(...(floodPathRefs.current.get(selection.id) ?? []));
+      const impact = data.impactByFlood.get(selection.id);
+      const ids = [...(impact?.substations ?? []), ...(impact?.ohl ?? []), ...(impact?.cables ?? [])];
+      for (const id of ids) targets.push(...(assetPathRefs.current.get(id) ?? []));
+    } else {
+      targets.push(...(assetPathRefs.current.get(selection.id) ?? []));
+    }
+
+    const bases = targets.map((path) => ({
+      path,
+      weight: (path.options.weight as number) ?? 2,
+      opacity: (path.options.opacity as number) ?? 1,
+      fillOpacity: (path.options.fillOpacity as number) ?? 0,
+    }));
+
+    const markerEls: HTMLElement[] = [];
+    const markerIds =
+      selection.type === "flood"
+        ? (data.impactByFlood.get(selection.id)?.substations ?? [])
+        : [selection.id];
+    for (const id of markerIds) {
+      const el = markerRefs.current.get(id)?.getElement()?.firstElementChild as HTMLElement | null;
+      if (el) {
+        el.classList.add("is-pulsing");
+        markerEls.push(el);
+      }
+    }
+
+    const start = performance.now();
+    let frame = requestAnimationFrame(function step(now) {
+      const elapsed = now - start;
+      if (elapsed >= PULSE_MS) {
+        for (const b of bases) {
+          b.path.setStyle({ weight: b.weight, opacity: b.opacity, fillOpacity: b.fillOpacity });
+        }
+        for (const el of markerEls) el.classList.remove("is-pulsing");
+        return;
+      }
+      const wave = 0.5 + 0.5 * Math.sin((elapsed / 400) * Math.PI);
+      for (const b of bases) {
+        b.path.setStyle({
+          weight: b.weight * (1 + 0.8 * wave),
+          opacity: Math.min(1, b.opacity * (0.7 + 0.3 * wave)),
+          fillOpacity: Math.min(1, b.fillOpacity * (0.75 + 0.5 * wave)),
+        });
+      }
+      frame = requestAnimationFrame(step);
+    });
+
+    return () => {
+      cancelAnimationFrame(frame);
+      for (const b of bases) {
+        b.path.setStyle({ weight: b.weight, opacity: b.opacity, fillOpacity: b.fillOpacity });
+      }
+      for (const el of markerEls) el.classList.remove("is-pulsing");
+    };
+  }, [selection, data]);
+
 
   /* ------------------------------------------------------------ zoom targets */
   useEffect(() => {

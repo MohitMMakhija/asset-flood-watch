@@ -2,6 +2,8 @@ import { ChevronRight, Crosshair, MapPin } from "lucide-react";
 import { useState } from "react";
 
 import { RiskBadge } from "@/components/common/RiskBadge";
+import { FloodImpactSummary } from "@/components/panel/FloodImpactSummary";
+
 import { KIND_LABEL, type AssetFeature, type AssetKind } from "@/lib/gis/types";
 import { useGis } from "@/state/gis-store";
 
@@ -83,22 +85,20 @@ function FloodDetails({ id }: { id: string }) {
 
   return (
     <div>
-      <SectionTitle>Flood Warning Area</SectionTitle>
-      <h2 className="text-[14px] font-semibold leading-snug">{p.name}</h2>
-      <div className="mt-2">
-        <Field label="River / Sea" value={p.river} />
-        <Field label="Local Authority" value={p.authority} />
+      <FloodImpactSummary feature={feature} />
+      <SectionTitle>Attributes</SectionTitle>
+      <div>
         <Field label="EA Region" value={p.area} />
         <Field label="Internal ID" value={p.id} />
-        <Field label="Description" value={p.description} />
       </div>
-      <SectionTitle>Affected assets</SectionTitle>
+      <SectionTitle>Impacted assets</SectionTitle>
       <AssetList ids={impact.substations} label="Substations" />
       <AssetList ids={impact.ohl} label="Overhead Lines" />
       <AssetList ids={impact.cables} label="Underground Cables" />
     </div>
   );
 }
+
 
 function AssetDetails({ feature }: { feature: AssetFeature }) {
   const { data, zoomToSelection } = useGis();
