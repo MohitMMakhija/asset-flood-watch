@@ -239,8 +239,10 @@ export function MapCanvas() {
       style: substationPolygonStyle as never,
       filter: (feature) => assetVisible((feature as AssetFeature).properties),
       onEachFeature: (feature, layer) => {
+        register(assetPathRefs.current, feature.properties.id, layer);
         layer.on("click", () => onFeatureClick(feature.properties.id));
       },
+
     });
     groupsRef.current.substationPolygons = substationPolygons;
 
