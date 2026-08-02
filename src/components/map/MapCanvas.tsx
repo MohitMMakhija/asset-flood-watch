@@ -183,10 +183,10 @@ export function MapCanvas() {
       return {
         renderer: floodRenderer,
         color: highlight ? p.selected : p.flood,
-        weight: highlight ? 2 : 0.8,
+        weight: selected ? 3.5 : highlight ? 2 : 0.8,
         opacity: highlight ? 1 : 0.85,
         fillColor: p.flood,
-        fillOpacity: highlight ? 0.55 : 0.22,
+        fillOpacity: selected ? 0.5 : highlight ? 0.4 : 0.22,
       };
     };
 
@@ -196,11 +196,13 @@ export function MapCanvas() {
       const highlighted =
         !!props && (isSelectedAsset(props.id) || (affected?.has(props.id) ?? false));
       const risky = !!props && props.risk !== "SAFE";
+      const colour = props ? riskColour(p, props.risk, kind) : baseColour(p, kind);
       return {
         renderer: lineRenderer,
-        color: props ? riskColour(p, props.risk, kind) : baseColour(p, kind),
+        color: highlighted ? brighten(colour) : colour,
         weight: highlighted ? 5 : risky ? 2.4 : 1.4,
         opacity: highlighted ? 1 : 0.9,
+        dashArray: highlighted && kind === "ohl" ? "10 6" : undefined,
       };
     };
 
@@ -213,8 +215,8 @@ export function MapCanvas() {
       return {
         renderer: lineRenderer,
         color: highlighted ? p.selected : colour,
-        weight: highlighted ? 2.5 : 1.2,
-        fillColor: colour,
+        weight: highlighted ? 3 : 1.2,
+        fillColor: highlighted ? brighten(colour) : colour,
         fillOpacity: 0.5,
       };
     };
@@ -225,9 +227,11 @@ export function MapCanvas() {
     const flood = L.geoJSON(data.flood as never, {
       style: floodStyle as never,
       onEachFeature: (feature, layer) => {
+        register(floodPathRefs.current, feature.properties.id, layer);
         layer.on("click", () => select({ type: "flood", id: feature.properties.id }));
       },
     });
+
     groupsRef.current.flood = flood;
 
     /* substations — analysis uses the polygon footprint, markers are for display */
