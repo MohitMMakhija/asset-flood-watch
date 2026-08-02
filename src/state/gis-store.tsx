@@ -76,6 +76,8 @@ export function GisProvider({ children }: { children: ReactNode }) {
   const [selection, setSelection] = useState<Selection>(null);
   const [zoomNonce, setZoomNonce] = useState(0);
   const [resetNonce, setResetNonce] = useState(0);
+  const [floodFilter, setFloodFilter] = useState<FloodFilter | null>(null);
+
 
   const toggleLayer = useCallback((key: keyof LayerVisibility) => {
     setLayersState((prev) => ({ ...prev, [key]: !prev[key] }));
