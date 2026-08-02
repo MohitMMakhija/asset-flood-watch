@@ -53,6 +53,28 @@ function riskColour(p: Palette, risk: RiskLevel, kind: AssetKind) {
   return baseColour(p, kind);
 }
 
+/** Resolve a brighter variant of a theme colour to a canvas-safe rgb() string. */
+const brightCache = new Map<string, string>();
+function brighten(colour: string) {
+  const cached = brightCache.get(colour);
+  if (cached) return cached;
+  let out = colour;
+  if (typeof document !== "undefined") {
+    const probe = document.createElement("div");
+    probe.style.color = `color-mix(in oklab, ${colour} 62%, white)`;
+    document.body.appendChild(probe);
+    const computed = getComputedStyle(probe).color;
+    probe.remove();
+    if (computed) out = computed;
+  }
+  brightCache.set(colour, out);
+  return out;
+}
+
+/** ms the selection emphasis animation runs before settling to a static highlight */
+const PULSE_MS = 3000;
+
+
 export function MapCanvas() {
   const { data, layers, filters, selection, select, zoomNonce, resetNonce } = useGis();
   const containerRef = useRef<HTMLDivElement>(null);
