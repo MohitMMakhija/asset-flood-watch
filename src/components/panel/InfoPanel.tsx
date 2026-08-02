@@ -2,6 +2,8 @@ import { ChevronRight, Crosshair, MapPin } from "lucide-react";
 import { useState } from "react";
 
 import { RiskBadge } from "@/components/common/RiskBadge";
+import { FloodImpactSummary } from "@/components/panel/FloodImpactSummary";
+
 import { KIND_LABEL, type AssetFeature, type AssetKind } from "@/lib/gis/types";
 import { useGis } from "@/state/gis-store";
 
