@@ -270,6 +270,7 @@ export function MapCanvas() {
       style: lineStyle("ohl") as never,
       filter: (feature) => assetVisible((feature as AssetFeature).properties),
       onEachFeature: (feature, layer) => {
+        register(assetPathRefs.current, feature.properties.id, layer);
         layer.on("click", () => onFeatureClick(feature.properties.id));
       },
     });
@@ -279,11 +280,13 @@ export function MapCanvas() {
       style: lineStyle("cable") as never,
       filter: (feature) => assetVisible((feature as AssetFeature).properties),
       onEachFeature: (feature, layer) => {
+        register(assetPathRefs.current, feature.properties.id, layer);
         layer.on("click", () => onFeatureClick(feature.properties.id));
       },
     });
     groupsRef.current.cable = cable;
   }, [data, filters, select]);
+
 
   /* ------------------------------------------------------- layer visibility */
   useEffect(() => {
