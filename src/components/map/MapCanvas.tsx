@@ -336,6 +336,71 @@ export function MapCanvas() {
     }
   }, [selection, data]);
 
+  /* ------------------------------- temporary emphasis animation on selection */
+  useEffect(() => {
+    if (!selection || !data) return;
+
+    const targets: L.Path[] = [];
+    if (selection.type === "flood") {
+      targets.push(...(floodPathRefs.current.get(selection.id) ?? []));
+      const impact = data.impactByFlood.get(selection.id);
+      const ids = [...(impact?.substations ?? []), ...(impact?.ohl ?? []), ...(impact?.cables ?? [])];
+      for (const id of ids) targets.push(...(assetPathRefs.current.get(id) ?? []));
+    } else {
+      targets.push(...(assetPathRefs.current.get(selection.id) ?? []));
+    }
+
+    const bases = targets.map((path) => ({
+      path,
+      weight: (path.options.weight as number) ?? 2,
+      opacity: (path.options.opacity as number) ?? 1,
+      fillOpacity: (path.options.fillOpacity as number) ?? 0,
+    }));
+
+    const markerEls: HTMLElement[] = [];
+    const markerIds =
+      selection.type === "flood"
+        ? (data.impactByFlood.get(selection.id)?.substations ?? [])
+        : [selection.id];
+    for (const id of markerIds) {
+      const el = markerRefs.current.get(id)?.getElement()?.firstElementChild as HTMLElement | null;
+      if (el) {
+        el.classList.add("gis-marker-pulse");
+        markerEls.push(el);
+      }
+    }
+
+    const start = performance.now();
+    let frame = requestAnimationFrame(function step(now) {
+      const elapsed = now - start;
+      if (elapsed >= PULSE_MS) {
+        for (const b of bases) {
+          b.path.setStyle({ weight: b.weight, opacity: b.opacity, fillOpacity: b.fillOpacity });
+        }
+        for (const el of markerEls) el.classList.remove("gis-marker-pulse");
+        return;
+      }
+      const wave = 0.5 + 0.5 * Math.sin((elapsed / 400) * Math.PI);
+      for (const b of bases) {
+        b.path.setStyle({
+          weight: b.weight * (1 + 0.8 * wave),
+          opacity: Math.min(1, b.opacity * (0.7 + 0.3 * wave)),
+          fillOpacity: Math.min(1, b.fillOpacity * (0.75 + 0.5 * wave)),
+        });
+      }
+      frame = requestAnimationFrame(step);
+    });
+
+    return () => {
+      cancelAnimationFrame(frame);
+      for (const b of bases) {
+        b.path.setStyle({ weight: b.weight, opacity: b.opacity, fillOpacity: b.fillOpacity });
+      }
+      for (const el of markerEls) el.classList.remove("gis-marker-pulse");
+    };
+  }, [selection, data]);
+
+
   /* ------------------------------------------------------------ zoom targets */
   useEffect(() => {
     const map = mapRef.current;
