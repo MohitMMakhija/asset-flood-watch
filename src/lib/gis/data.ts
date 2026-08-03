@@ -10,10 +10,8 @@ import type {
   RiskLevel,
 } from "./types";
 
-import floodAsset from "@/data/flood.geojson.asset.json";
-import substationsAsset from "@/data/substations.geojson.asset.json";
-import ohlAsset from "@/data/ohl.geojson.asset.json";
-import cablesAsset from "@/data/cables.geojson.asset.json";
+import { GIS_DATASETS } from "@/config/datasets";
+
 
 async function fetchJson<T>(url: string): Promise<T> {
   const res = await fetch(url);
@@ -68,10 +66,10 @@ function buildImpactIndex(assets: AssetFeature[]) {
 
 export async function loadGisData(): Promise<GisData> {
   const [flood, substations, ohl, cables] = await Promise.all([
-    fetchJson<FeatureCollection<FloodProperties>>(floodAsset.url),
-    fetchJson<FeatureCollection<AssetProperties>>(substationsAsset.url),
-    fetchJson<FeatureCollection<AssetProperties>>(ohlAsset.url),
-    fetchJson<FeatureCollection<AssetProperties>>(cablesAsset.url),
+    fetchJson<FeatureCollection<FloodProperties>>(GIS_DATASETS.flood),
+    fetchJson<FeatureCollection<AssetProperties>>(GIS_DATASETS.substations),
+    fetchJson<FeatureCollection<AssetProperties>>(GIS_DATASETS.ohl),
+    fetchJson<FeatureCollection<AssetProperties>>(GIS_DATASETS.cables),
   ]);
 
   const assetsById = new Map<string, AssetFeature>();
