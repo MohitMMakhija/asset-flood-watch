@@ -50,7 +50,7 @@ function MapPage() {
             <div className="absolute left-3 top-3">
               <MapToolbar containerRef={containerRef} />
             </div>
-            <div className="absolute bottom-8 right-3">
+            <div className="absolute bottom-8 left-3">
               <Legend />
             </div>
             {(isLoading || error) && (
