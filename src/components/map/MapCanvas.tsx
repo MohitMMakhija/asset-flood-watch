@@ -130,6 +130,17 @@ export function MapCanvas() {
     };
   }, []);
 
+  /* ------------------------------------- keep canvas sized to its container */
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el || typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(() => {
+      mapRef.current?.invalidateSize({ animate: false });
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   /* ------------------------------------------------------------ build layers */
   useEffect(() => {
     const map = mapRef.current;
