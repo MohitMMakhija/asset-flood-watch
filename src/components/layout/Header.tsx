@@ -135,13 +135,26 @@ export function Header() {
 
       <div className="hidden num text-[11.5px] text-muted-foreground xl:block">{today}</div>
 
-      <Popover>
+      <Popover
+        open={layersOpen}
+        onOpenChange={(next) => {
+          setLayersOpen(next);
+          if (next) setLegendOpen(false);
+        }}
+      >
         <PopoverTrigger asChild>
           <Button variant="secondary" size="sm" className="h-8 gap-2 text-[12px]">
             <Layers className="size-3.5" /> Layers
           </Button>
         </PopoverTrigger>
-        <PopoverContent align="end" className="w-64 border-border bg-popover p-3">
+        <PopoverContent
+          align="end"
+          side="bottom"
+          sideOffset={8}
+          collisionPadding={12}
+          avoidCollisions
+          className="z-2000 w-64 rounded-md border-border bg-popover p-3 shadow-2xl"
+        >
           <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
             Map layers
           </p>
