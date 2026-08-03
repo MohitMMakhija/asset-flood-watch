@@ -10,10 +10,8 @@ import type {
   RiskLevel,
 } from "./types";
 
-import floodAsset from "@/data/flood.geojson.asset.json";
-import substationsAsset from "@/data/substations.geojson.asset.json";
-import ohlAsset from "@/data/ohl.geojson.asset.json";
-import cablesAsset from "@/data/cables.geojson.asset.json";
+import { GIS_DATASETS } from "@/config/datasets";
+
 
 async function fetchJson<T>(url: string): Promise<T> {
   const res = await fetch(url);
