@@ -126,6 +126,10 @@ export function GisProvider({ children }: { children: ReactNode }) {
       resetView,
       floodFilter,
       setFloodFilter,
+      panelCollapsed,
+      setPanelCollapsed,
+      legendOpen,
+      setLegendOpen,
     }),
     [
       data,
@@ -141,6 +145,8 @@ export function GisProvider({ children }: { children: ReactNode }) {
       resetNonce,
       resetView,
       floodFilter,
+      panelCollapsed,
+      legendOpen,
     ],
   );
 
