@@ -28,9 +28,10 @@ interface Result {
 }
 
 export function Header() {
-  const { data, layers, toggleLayer, resetView, zoomToSelection } = useGis();
+  const { data, layers, toggleLayer, resetView, zoomToSelection, setLegendOpen } = useGis();
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
+  const [layersOpen, setLayersOpen] = useState(false);
   const navigate = useNavigate();
 
   const today = useMemo(
