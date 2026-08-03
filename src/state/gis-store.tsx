@@ -52,6 +52,12 @@ interface GisContextValue {
   resetView: () => void;
   floodFilter: FloodFilter | null;
   setFloodFilter: (next: FloodFilter | null) => void;
+  /** UI-only: right info panel collapsed state (remembered for the session) */
+  panelCollapsed: boolean;
+  setPanelCollapsed: (next: boolean) => void;
+  /** UI-only: floating legend open state, coordinated with the Layers popup */
+  legendOpen: boolean;
+  setLegendOpen: (next: boolean) => void;
 }
 
 
