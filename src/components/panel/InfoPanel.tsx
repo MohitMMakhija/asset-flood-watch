@@ -1,4 +1,4 @@
-import { ChevronRight, Crosshair, MapPin } from "lucide-react";
+import { ChevronLeft, ChevronRight, ChevronsRight, Crosshair, Info, MapPin } from "lucide-react";
 import { useState } from "react";
 
 import { RiskBadge } from "@/components/common/RiskBadge";
@@ -158,22 +158,70 @@ function AssetDetails({ feature }: { feature: AssetFeature }) {
   );
 }
 
+function panelTitle(selection: ReturnType<typeof useGis>["selection"]) {
+  if (!selection) return "Selected Feature";
+  return selection.type === "flood" ? "Flood Details" : "Selected Asset";
+}
+
+function EmptyState() {
+  return (
+    <div className="pt-4">
+      <p className="text-[12.5px] font-semibold">No feature selected</p>
+      <p className="mt-1 text-[12px] text-muted-foreground">
+        Select a network asset on the map to view
+      </p>
+      <ul className="mt-2 space-y-1 text-[12px] text-muted-foreground">
+        {["Asset information", "Flood exposure", "Risk classification"].map((item) => (
+          <li key={item} className="flex items-center gap-2">
+            <span className="size-1 shrink-0 rounded-full bg-muted-foreground" />
+            {item}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 export function InfoPanel() {
-  const { data, selection, isLoading } = useGis();
+  const { data, selection, isLoading, panelCollapsed, setPanelCollapsed } = useGis();
+
+  if (panelCollapsed) {
+    return (
+      <div className="flex w-8 shrink-0 flex-col items-center border-l border-border bg-panel transition-all duration-300">
+        <button
+          onClick={() => setPanelCollapsed(false)}
+          title="Expand feature information"
+          aria-label="Expand feature information"
+          className="flex w-full flex-col items-center gap-2 py-2 text-muted-foreground hover:text-foreground"
+        >
+          <ChevronLeft className="size-4" />
+          <Info className="size-4" />
+          <span className="mt-1 text-[10.5px] font-semibold uppercase tracking-wider [writing-mode:vertical-rl]">
+            {panelTitle(selection)}
+          </span>
+        </button>
+      </div>
+    );
+  }
 
   return (
-    <aside className="flex w-80 shrink-0 flex-col border-l border-border bg-panel">
-      <div className="border-b border-border px-3 py-2 text-[10.5px] font-semibold uppercase tracking-wider text-muted-foreground">
-        Feature information
+    <aside className="flex w-80 shrink-0 flex-col border-l border-border bg-panel transition-all duration-300">
+      <div className="flex items-center gap-2 border-b border-border px-3 py-2">
+        <span className="flex-1 truncate text-[10.5px] font-semibold uppercase tracking-wider text-muted-foreground">
+          {panelTitle(selection)}
+        </span>
+        <button
+          onClick={() => setPanelCollapsed(true)}
+          title="Collapse panel"
+          aria-label="Collapse panel"
+          className="text-muted-foreground hover:text-foreground"
+        >
+          <ChevronsRight className="size-4" />
+        </button>
       </div>
       <div className="min-h-0 flex-1 overflow-auto px-3 pb-4">
         {isLoading && <p className="pt-3 text-[12px] text-muted-foreground">Loading GIS layers…</p>}
-        {!isLoading && !selection && (
-          <p className="pt-3 text-[12px] leading-relaxed text-muted-foreground">
-            Select a Flood Warning Area or a network asset on the map to view its attributes and
-            spatial exposure.
-          </p>
-        )}
+        {!isLoading && !selection && <EmptyState />}
         {selection?.type === "flood" && <FloodDetails id={selection.id} />}
         {selection?.type === "asset" && data?.assetsById.get(selection.id) && (
           <AssetDetails feature={data.assetsById.get(selection.id)!} />

@@ -52,6 +52,12 @@ interface GisContextValue {
   resetView: () => void;
   floodFilter: FloodFilter | null;
   setFloodFilter: (next: FloodFilter | null) => void;
+  /** UI-only: right info panel collapsed state (remembered for the session) */
+  panelCollapsed: boolean;
+  setPanelCollapsed: (next: boolean) => void;
+  /** UI-only: floating legend open state, coordinated with the Layers popup */
+  legendOpen: boolean;
+  setLegendOpen: (next: boolean) => void;
 }
 
 
@@ -77,6 +83,9 @@ export function GisProvider({ children }: { children: ReactNode }) {
   const [zoomNonce, setZoomNonce] = useState(0);
   const [resetNonce, setResetNonce] = useState(0);
   const [floodFilter, setFloodFilter] = useState<FloodFilter | null>(null);
+  const [panelCollapsed, setPanelCollapsed] = useState(false);
+  const [legendOpen, setLegendOpen] = useState(false);
+
 
 
   const toggleLayer = useCallback((key: keyof LayerVisibility) => {
@@ -117,6 +126,10 @@ export function GisProvider({ children }: { children: ReactNode }) {
       resetView,
       floodFilter,
       setFloodFilter,
+      panelCollapsed,
+      setPanelCollapsed,
+      legendOpen,
+      setLegendOpen,
     }),
     [
       data,
@@ -132,6 +145,8 @@ export function GisProvider({ children }: { children: ReactNode }) {
       resetNonce,
       resetView,
       floodFilter,
+      panelCollapsed,
+      legendOpen,
     ],
   );
 
