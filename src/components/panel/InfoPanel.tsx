@@ -1,4 +1,4 @@
-import { ChevronRight, Crosshair, MapPin } from "lucide-react";
+import { ChevronLeft, ChevronRight, ChevronsRight, Crosshair, Info, MapPin } from "lucide-react";
 import { useState } from "react";
 
 import { RiskBadge } from "@/components/common/RiskBadge";
