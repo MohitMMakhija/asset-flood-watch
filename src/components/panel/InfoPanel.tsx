@@ -159,14 +159,14 @@ function AssetDetails({ feature }: { feature: AssetFeature }) {
 }
 
 function panelTitle(selection: ReturnType<typeof useGis>["selection"]) {
-  if (!selection) return "Selected Feature";
+  if (!selection) return "Selected Asset";
   return selection.type === "flood" ? "Flood Details" : "Selected Asset";
 }
 
 function EmptyState() {
   return (
     <div className="pt-4">
-      <p className="text-[12.5px] font-semibold">No feature selected</p>
+      <p className="text-[12.5px] font-semibold">No asset selected</p>
       <p className="mt-1 text-[12px] text-muted-foreground">
         Select a network asset on the map to view
       </p>
@@ -190,8 +190,8 @@ export function InfoPanel() {
       <div className="flex w-8 shrink-0 flex-col items-center border-l border-border bg-panel transition-all duration-300">
         <button
           onClick={() => setPanelCollapsed(false)}
-          title="Expand feature information"
-          aria-label="Expand feature information"
+          title="Expand asset information"
+          aria-label="Expand asset information"
           className="flex w-full flex-col items-center gap-2 py-2 text-muted-foreground hover:text-foreground"
         >
           <ChevronLeft className="size-4" />
