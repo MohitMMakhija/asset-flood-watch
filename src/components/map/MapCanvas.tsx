@@ -38,7 +38,7 @@ function readPalette(): Palette {
     high: token("--risk-high"),
     medium: token("--risk-medium"),
     low: token("--risk-low"),
-    selected: token("--foreground"),
+    selected: token("--primary"),
   };
 }
 
@@ -107,12 +107,12 @@ export function MapCanvas() {
     mapRef.current = map;
     paletteRef.current = readPalette();
 
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png", {
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png", {
       subdomains: "abcd",
       maxZoom: 19,
       attribution: "&copy; OpenStreetMap &copy; CARTO",
     }).addTo(map);
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png", {
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png", {
       subdomains: "abcd",
       maxZoom: 19,
       pane: "shadowPane",
