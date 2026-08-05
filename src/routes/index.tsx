@@ -56,7 +56,7 @@ function Kpi({
 
 function Panel({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="rounded-sm border border-border bg-card p-3">
+    <section className="rounded-md border border-border bg-card p-4 shadow-[0_1px_2px_rgba(27,31,35,0.05)]">
       <h2 className="mb-2.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
         {title}
       </h2>
