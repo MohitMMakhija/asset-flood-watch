@@ -5,8 +5,8 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Enterprise GIS design system — dark navy utility theme.
- * All colours are oklch semantic tokens. Never hardcode colours in components.
+ * National Grid enterprise design system — clean blue & white light theme.
+ * All colours are semantic tokens. Never hardcode colours in components.
  */
 
 @theme inline {
@@ -44,48 +44,57 @@
   --color-layer-substation: var(--layer-substation);
   --color-layer-ohl: var(--layer-ohl);
   --color-layer-cable: var(--layer-cable);
-  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", "Segoe UI", Roboto, Arial, ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
 }
 
 :root {
-  --radius: 0.25rem;
+  --radius: 0.5rem;
 
-  --background: oklch(0.19 0.031 259);
-  --foreground: oklch(0.93 0.011 254);
+  --background: #ffffff;
+  --foreground: #1b1f23;
 
-  --chrome: oklch(0.235 0.033 259);
-  --card: oklch(0.235 0.033 259);
-  --card-foreground: oklch(0.93 0.011 254);
-  --panel: oklch(0.222 0.032 259);
-  --panel-foreground: oklch(0.93 0.011 254);
-  --popover: oklch(0.235 0.033 259);
-  --popover-foreground: oklch(0.93 0.011 254);
+  --chrome: #ffffff;
+  --card: #ffffff;
+  --card-foreground: #1b1f23;
+  --panel: #f8fafd;
+  --panel-foreground: #1b1f23;
+  --popover: #ffffff;
+  --popover-foreground: #1b1f23;
 
-  --primary: oklch(0.62 0.14 245);
-  --primary-foreground: oklch(0.16 0.03 259);
-  --secondary: oklch(0.28 0.032 259);
-  --secondary-foreground: oklch(0.9 0.011 254);
-  --muted: oklch(0.27 0.03 259);
-  --muted-foreground: oklch(0.68 0.021 256);
-  --accent: oklch(0.3 0.045 253);
-  --accent-foreground: oklch(0.93 0.011 254);
-  --destructive: oklch(0.55 0.19 25);
-  --destructive-foreground: oklch(0.96 0.01 254);
+  --primary: #003da5;
+  --primary-foreground: #ffffff;
+  --primary-hover: #0b4dba;
+  --secondary: #f5f8fc;
+  --secondary-foreground: #003da5;
+  --muted: #f5f8fc;
+  --muted-foreground: #5c6b7a;
+  --muted-subtle: #7d8a99;
+  --accent: #eaf2ff;
+  --accent-foreground: #003da5;
+  --destructive: #d32f2f;
+  --destructive-foreground: #ffffff;
 
-  --border: oklch(0.32 0.031 259);
-  --input: oklch(0.3 0.031 259);
-  --ring: oklch(0.62 0.14 245);
+  --border: #d9e3f2;
+  --input: #d9e3f2;
+  --ring: #003da5;
 
-  --risk-high: oklch(0.58 0.21 24);
-  --risk-medium: oklch(0.68 0.16 48);
-  --risk-low: oklch(0.83 0.15 92);
-  --risk-safe: oklch(0.68 0.021 256);
+  --disabled-bg: #f3f5f7;
+  --disabled-fg: #9aa6b2;
 
-  --layer-flood: oklch(0.62 0.13 243);
-  --layer-substation: oklch(0.66 0.14 248);
-  --layer-ohl: oklch(0.7 0.15 55);
-  --layer-cable: oklch(0.68 0.14 155);
+  --risk-high: #d32f2f;
+  --risk-medium: #f2a900;
+  --risk-low: #d9b400;
+  --risk-safe: #7d8a99;
+
+  --layer-flood: #4f8dff;
+  --layer-substation: #003da5;
+  --layer-ohl: #1f5fbf;
+  --layer-cable: #2e8540;
+
+  --success: #2e8540;
+  --warning: #f2a900;
+  --info: #1976d2;
 }
 
 @layer base {
@@ -103,9 +112,45 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
-    font-size: 13px;
+    font-size: 14px;
+    line-height: 1.55;
     -webkit-font-smoothing: antialiased;
     overflow: hidden;
+  }
+
+  a {
+    color: var(--primary);
+  }
+
+  a:hover {
+    color: var(--primary-hover);
+  }
+
+  a:visited {
+    color: color-mix(in oklab, var(--primary) 78%, var(--muted-foreground));
+  }
+
+  :focus-visible {
+    outline: 2px solid color-mix(in oklab, var(--ring) 45%, transparent);
+    outline-offset: 1px;
+  }
+
+  button,
+  a,
+  input,
+  [role="button"] {
+    transition-property: color, background-color, border-color, box-shadow, opacity;
+    transition-duration: 170ms;
+    transition-timing-function: ease-out;
+  }
+
+  ::placeholder {
+    color: var(--muted-subtle);
+  }
+
+  :disabled {
+    background-color: var(--disabled-bg);
+    color: var(--disabled-fg);
   }
 }
 
@@ -114,9 +159,34 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* Leaflet chrome restyled for the dark enterprise theme */
+/* Subtle enterprise scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklab, var(--primary) 45%, transparent) #eef2f7;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #eef2f7;
+}
+
+::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--primary) 45%, transparent);
+  border: 2px solid #eef2f7;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* Leaflet chrome restyled for the light enterprise theme */
 .leaflet-container {
-  background: oklch(0.16 0.028 259);
+  background: #eef2f7;
   font-family: var(--font-sans);
   outline: none;
 }
@@ -125,16 +195,16 @@
 .leaflet-control-layers,
 .leaflet-control-attribution,
 .leaflet-control-scale-line {
-  background: color-mix(in oklab, var(--chrome) 92%, transparent) !important;
-  color: var(--foreground) !important;
+  background: color-mix(in oklab, var(--chrome) 95%, transparent) !important;
+  color: var(--muted-foreground) !important;
   border: 1px solid var(--border) !important;
-  box-shadow: none !important;
+  box-shadow: 0 1px 3px color-mix(in oklab, var(--foreground) 8%, transparent) !important;
 }
 
 .leaflet-bar a,
 .leaflet-bar a:hover {
   background: transparent !important;
-  color: var(--foreground) !important;
+  color: var(--primary) !important;
   border-bottom: 1px solid var(--border) !important;
 }
 
@@ -159,7 +229,7 @@
   color: var(--foreground);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  box-shadow: none;
+  box-shadow: 0 6px 20px color-mix(in oklab, var(--foreground) 10%, transparent);
 }
 
 .gis-substation-marker {
@@ -169,9 +239,9 @@
 
 /* Selected-feature emphasis (Enhancement 2) */
 .gis-substation-marker.is-selected {
-  outline: 2px solid var(--foreground);
+  outline: 2px solid var(--primary);
   outline-offset: 0;
-  box-shadow: 0 0 0 1px color-mix(in oklab, var(--background) 70%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--background) 80%, transparent);
 }
 
 .gis-substation-marker.is-pulsing {
@@ -181,9 +251,9 @@
 @keyframes gis-marker-pulse {
   0%,
   100% {
-    box-shadow: 0 0 0 0 color-mix(in oklab, var(--foreground) 55%, transparent);
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--primary) 55%, transparent);
   }
   50% {
-    box-shadow: 0 0 0 6px color-mix(in oklab, var(--foreground) 0%, transparent);
+    box-shadow: 0 0 0 6px color-mix(in oklab, var(--primary) 0%, transparent);
   }
 }
