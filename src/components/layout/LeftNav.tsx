@@ -22,8 +22,8 @@ export function LeftNav() {
             title={item.label}
             className={`flex items-center gap-3 border-l-2 px-4 py-2.5 text-[12.5px] tracking-wide transition-colors ${
               active
-                ? "border-l-primary bg-accent text-foreground"
-                : "border-l-transparent text-muted-foreground hover:bg-accent/50 hover:text-foreground"
+                ? "border-l-primary bg-accent font-semibold text-primary"
+                : "border-l-transparent text-muted-foreground hover:bg-secondary hover:text-primary"
             }`}
           >
             <item.icon className="size-4 shrink-0" />
