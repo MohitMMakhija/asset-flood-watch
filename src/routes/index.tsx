@@ -42,7 +42,7 @@ function Kpi({
   }[tone];
 
   return (
-    <div className={`rounded-sm border bg-card px-3 py-2.5 ${toneClass}`}>
+    <div className={`rounded-md border bg-card px-4 py-3 shadow-[0_1px_2px_rgba(27,31,35,0.05)] ${toneClass}`}>
       <p className="text-[10.5px] font-semibold uppercase tracking-wider text-muted-foreground">
         {label}
       </p>
@@ -56,7 +56,7 @@ function Kpi({
 
 function Panel({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="rounded-sm border border-border bg-card p-3">
+    <section className="rounded-md border border-border bg-card p-4 shadow-[0_1px_2px_rgba(27,31,35,0.05)]">
       <h2 className="mb-2.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
         {title}
       </h2>

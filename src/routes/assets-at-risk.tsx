@@ -154,7 +154,7 @@ function AssetsAtRiskPage() {
 
       <div className="min-h-0 flex-1 overflow-auto">
         <table className="w-full border-collapse text-[12px]">
-          <thead className="sticky top-0 bg-chrome text-[10.5px] uppercase tracking-wider text-muted-foreground">
+          <thead className="sticky top-0 bg-secondary text-[10.5px] uppercase tracking-wider text-secondary-foreground">
             <tr>
               <th className="border-b border-border px-3 py-2 text-left font-semibold">Asset name</th>
               <th className="border-b border-border px-3 py-2 text-left font-semibold">Type</th>

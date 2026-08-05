@@ -82,7 +82,7 @@ export function Header() {
   };
 
   return (
-    <header className="flex h-14 shrink-0 items-center gap-4 border-b border-border bg-chrome px-4">
+    <header className="flex h-14 shrink-0 items-center gap-4 border-b border-border bg-chrome px-4 shadow-[0_1px_3px_rgba(27,31,35,0.06)]">
       <div className="flex items-center gap-3">
         <div className="flex size-8 items-center justify-center rounded-sm border border-primary/60 bg-primary/15">
           <Layers className="size-4 text-primary" />
