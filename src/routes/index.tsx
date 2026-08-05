@@ -42,7 +42,7 @@ function Kpi({
   }[tone];
 
   return (
-    <div className={`rounded-sm border bg-card px-3 py-2.5 ${toneClass}`}>
+    <div className={`rounded-md border bg-card px-4 py-3 shadow-[0_1px_2px_rgba(27,31,35,0.05)] ${toneClass}`}>
       <p className="text-[10.5px] font-semibold uppercase tracking-wider text-muted-foreground">
         {label}
       </p>
