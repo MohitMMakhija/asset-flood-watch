@@ -44,6 +44,13 @@
   --color-layer-substation: var(--layer-substation);
   --color-layer-ohl: var(--layer-ohl);
   --color-layer-cable: var(--layer-cable);
+  --color-brand: var(--brand);
+  --color-brand-mid: var(--brand-mid);
+  --color-brand-light: var(--brand-light);
+  --color-border-info: var(--border-info);
+  --color-border-warn: var(--border-warn);
+  --color-border-critical: var(--border-critical);
+  --color-border-neutral: var(--border-neutral);
   --font-sans: "Inter", "Segoe UI", Roboto, Arial, ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
 }
@@ -83,9 +90,18 @@
   --disabled-fg: #9aa6b2;
 
   --risk-high: #d32f2f;
-  --risk-medium: #f2a900;
-  --risk-low: #d9b400;
-  --risk-safe: #7d8a99;
+  --risk-medium: #f5a623;
+  --risk-low: #5f6b7a;
+  --risk-safe: #2e7d32;
+
+  --brand: #003c71;
+  --brand-mid: #2f6fb6;
+  --brand-light: #6ea8e5;
+
+  --border-neutral: #e8ecf1;
+  --border-info: #d6e8f8;
+  --border-warn: #ffe3b3;
+  --border-critical: #f8d7da;
 
   --layer-flood: #4f8dff;
   --layer-substation: #003da5;

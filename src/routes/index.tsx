@@ -40,11 +40,11 @@ function Kpi({
   valueLinkTitle?: string;
 }) {
   const toneClass = {
-    default: "text-foreground border-border",
-    primary: "text-primary border-primary/40",
-    high: "text-risk-high border-risk-high/40",
-    medium: "text-risk-medium border-risk-medium/40",
-    low: "text-risk-low border-risk-low/40",
+    default: "text-brand border-border-info",
+    primary: "text-brand border-border-info",
+    high: "text-risk-high border-border-critical",
+    medium: "text-risk-medium border-border-warn",
+    low: "text-risk-low border-border-neutral",
   }[tone];
 
   const formatted = typeof value === "number" ? value.toLocaleString() : value;
@@ -156,7 +156,7 @@ function Dashboard() {
         <Kpi
           label="Substations at Risk"
           value={s.substationsAtRisk}
-          tone="high"
+          tone="medium"
           hint={`${((s.substationsAtRisk / s.substations) * 100).toFixed(1)}% of substations`}
         />
         <Kpi
@@ -192,7 +192,7 @@ function Dashboard() {
           <Bar label="High" value={s.high} total={totalAssets} colour="bg-risk-high" />
           <Bar label="Medium" value={s.medium} total={totalAssets} colour="bg-risk-medium" />
           <Bar label="Low" value={s.low} total={totalAssets} colour="bg-risk-low" />
-          <Bar label="Safe" value={s.safe} total={totalAssets} colour="bg-muted-foreground" />
+          <Bar label="Safe" value={s.safe} total={totalAssets} colour="bg-risk-safe" />
         </Panel>
 
         <Panel title="Exposure by asset category">
@@ -200,14 +200,14 @@ function Dashboard() {
             label="Substations"
             value={s.substationsAtRisk}
             total={s.substations}
-            colour="bg-risk-high"
+            colour="bg-brand"
           />
-          <Bar label="Overhead Lines" value={s.ohlAtRisk} total={s.ohl} colour="bg-layer-ohl" />
+          <Bar label="Overhead Lines" value={s.ohlAtRisk} total={s.ohl} colour="bg-brand-mid" />
           <Bar
             label="Underground Cables"
             value={s.cablesAtRisk}
             total={s.cables}
-            colour="bg-layer-cable"
+            colour="bg-brand-light"
           />
         </Panel>
 
