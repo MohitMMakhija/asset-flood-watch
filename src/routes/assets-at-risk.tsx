@@ -9,7 +9,7 @@ import { useGis } from "@/state/gis-store";
 
 export const Route = createFileRoute("/assets-at-risk")({
   validateSearch: (search: Record<string, unknown>): { risk?: RiskLevel } => {
-    const raw = typeof search.risk === "string" ? search.risk.toUpperCase() : undefined;
+    const raw = typeof search["risk"] === "string" ? search["risk"].toUpperCase() : undefined;
     return raw === "HIGH" || raw === "MEDIUM" || raw === "LOW" ? { risk: raw } : {};
   },
   head: () => ({
