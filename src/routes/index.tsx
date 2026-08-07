@@ -174,7 +174,15 @@ function Dashboard() {
       </div>
 
       <div className="mb-3 grid grid-cols-3 gap-3">
-        <Kpi label="High Risk" value={s.high} tone="high" hint="Substation footprint in flood area" />
+        <Kpi
+          label="High Risk"
+          value={s.high}
+          tone="high"
+          hint="Asset footprint in flood area"
+          valueLinkTo="/assets-at-risk"
+          valueLinkSearch={{ risk: "HIGH" }}
+          valueLinkTitle="View High Risk assets"
+        />
         <Kpi label="Medium Risk" value={s.medium} tone="medium" hint="Line intersects flood area" />
         <Kpi label="Low Risk" value={s.low} tone="low" hint="Within 250 m of a flood area" />
       </div>
