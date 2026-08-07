@@ -60,7 +60,7 @@ function Kpi({
             to={valueLinkTo}
             search={valueLinkSearch}
             title={valueLinkTitle}
-            className="cursor-pointer rounded-sm underline-offset-4 hover:underline hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="cursor-pointer rounded-sm text-inherit underline-offset-4 hover:text-inherit hover:underline hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             {formatted}
           </Link>
