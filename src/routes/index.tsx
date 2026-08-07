@@ -27,11 +27,17 @@ function Kpi({
   value,
   tone = "default",
   hint,
+  valueLinkTo,
+  valueLinkSearch,
+  valueLinkTitle,
 }: {
   label: string;
   value: number | string;
   tone?: "default" | "high" | "medium" | "low" | "primary";
   hint?: string;
+  valueLinkTo?: string;
+  valueLinkSearch?: Record<string, string>;
+  valueLinkTitle?: string;
 }) {
   const toneClass = {
     default: "text-foreground border-border",
@@ -41,18 +47,32 @@ function Kpi({
     low: "text-risk-low border-risk-low/40",
   }[tone];
 
+  const formatted = typeof value === "number" ? value.toLocaleString() : value;
+
   return (
     <div className={`rounded-md border bg-card px-4 py-3 shadow-[0_1px_2px_rgba(27,31,35,0.05)] ${toneClass}`}>
       <p className="text-[10.5px] font-semibold uppercase tracking-wider text-muted-foreground">
         {label}
       </p>
       <p className="num mt-1 text-[22px] font-semibold leading-none">
-        {typeof value === "number" ? value.toLocaleString() : value}
+        {valueLinkTo ? (
+          <Link
+            to={valueLinkTo}
+            search={valueLinkSearch}
+            title={valueLinkTitle}
+            className="cursor-pointer rounded-sm underline-offset-4 hover:underline hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            {formatted}
+          </Link>
+        ) : (
+          formatted
+        )}
       </p>
       {hint && <p className="mt-1 text-[10.5px] text-muted-foreground">{hint}</p>}
     </div>
   );
 }
+
 
 function Panel({ title, children }: { title: string; children: React.ReactNode }) {
   return (
