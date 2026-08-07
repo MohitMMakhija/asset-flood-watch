@@ -156,7 +156,7 @@ function Dashboard() {
         <Kpi
           label="Substations at Risk"
           value={s.substationsAtRisk}
-          tone="high"
+          tone="medium"
           hint={`${((s.substationsAtRisk / s.substations) * 100).toFixed(1)}% of substations`}
         />
         <Kpi
