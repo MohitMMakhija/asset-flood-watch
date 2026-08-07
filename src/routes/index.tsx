@@ -192,7 +192,7 @@ function Dashboard() {
           <Bar label="High" value={s.high} total={totalAssets} colour="bg-risk-high" />
           <Bar label="Medium" value={s.medium} total={totalAssets} colour="bg-risk-medium" />
           <Bar label="Low" value={s.low} total={totalAssets} colour="bg-risk-low" />
-          <Bar label="Safe" value={s.safe} total={totalAssets} colour="bg-muted-foreground" />
+          <Bar label="Safe" value={s.safe} total={totalAssets} colour="bg-risk-safe" />
         </Panel>
 
         <Panel title="Exposure by asset category">
@@ -200,14 +200,14 @@ function Dashboard() {
             label="Substations"
             value={s.substationsAtRisk}
             total={s.substations}
-            colour="bg-risk-high"
+            colour="bg-brand"
           />
-          <Bar label="Overhead Lines" value={s.ohlAtRisk} total={s.ohl} colour="bg-layer-ohl" />
+          <Bar label="Overhead Lines" value={s.ohlAtRisk} total={s.ohl} colour="bg-brand-mid" />
           <Bar
             label="Underground Cables"
             value={s.cablesAtRisk}
             total={s.cables}
-            colour="bg-layer-cable"
+            colour="bg-brand-light"
           />
         </Panel>
 
