@@ -27,11 +27,17 @@ function Kpi({
   value,
   tone = "default",
   hint,
+  valueLinkTo,
+  valueLinkSearch,
+  valueLinkTitle,
 }: {
   label: string;
   value: number | string;
   tone?: "default" | "high" | "medium" | "low" | "primary";
   hint?: string;
+  valueLinkTo?: string;
+  valueLinkSearch?: Record<string, string>;
+  valueLinkTitle?: string;
 }) {
   const toneClass = {
     default: "text-foreground border-border",
@@ -41,18 +47,32 @@ function Kpi({
     low: "text-risk-low border-risk-low/40",
   }[tone];
 
+  const formatted = typeof value === "number" ? value.toLocaleString() : value;
+
   return (
     <div className={`rounded-md border bg-card px-4 py-3 shadow-[0_1px_2px_rgba(27,31,35,0.05)] ${toneClass}`}>
       <p className="text-[10.5px] font-semibold uppercase tracking-wider text-muted-foreground">
         {label}
       </p>
       <p className="num mt-1 text-[22px] font-semibold leading-none">
-        {typeof value === "number" ? value.toLocaleString() : value}
+        {valueLinkTo ? (
+          <Link
+            to={valueLinkTo}
+            search={valueLinkSearch}
+            title={valueLinkTitle}
+            className="cursor-pointer rounded-sm underline-offset-4 hover:underline hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            {formatted}
+          </Link>
+        ) : (
+          formatted
+        )}
       </p>
       {hint && <p className="mt-1 text-[10.5px] text-muted-foreground">{hint}</p>}
     </div>
   );
 }
+
 
 function Panel({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -154,7 +174,15 @@ function Dashboard() {
       </div>
 
       <div className="mb-3 grid grid-cols-3 gap-3">
-        <Kpi label="High Risk" value={s.high} tone="high" hint="Substation footprint in flood area" />
+        <Kpi
+          label="High Risk"
+          value={s.high}
+          tone="high"
+          hint="Asset footprint in flood area"
+          valueLinkTo="/assets-at-risk"
+          valueLinkSearch={{ risk: "HIGH" }}
+          valueLinkTitle="View High Risk assets"
+        />
         <Kpi label="Medium Risk" value={s.medium} tone="medium" hint="Line intersects flood area" />
         <Kpi label="Low Risk" value={s.low} tone="low" hint="Within 250 m of a flood area" />
       </div>
