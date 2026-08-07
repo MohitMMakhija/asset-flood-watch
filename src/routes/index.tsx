@@ -40,11 +40,11 @@ function Kpi({
   valueLinkTitle?: string;
 }) {
   const toneClass = {
-    default: "text-foreground border-border",
-    primary: "text-primary border-primary/40",
-    high: "text-risk-high border-risk-high/40",
-    medium: "text-risk-medium border-risk-medium/40",
-    low: "text-risk-low border-risk-low/40",
+    default: "text-brand border-border-info",
+    primary: "text-brand border-border-info",
+    high: "text-risk-high border-border-critical",
+    medium: "text-risk-medium border-border-warn",
+    low: "text-risk-low border-border-neutral",
   }[tone];
 
   const formatted = typeof value === "number" ? value.toLocaleString() : value;
