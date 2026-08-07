@@ -8,6 +8,10 @@ import { KIND_LABEL, type AssetKind, type RiskLevel } from "@/lib/gis/types";
 import { useGis } from "@/state/gis-store";
 
 export const Route = createFileRoute("/assets-at-risk")({
+  validateSearch: (search: Record<string, unknown>): { risk?: RiskLevel } => {
+    const raw = typeof search.risk === "string" ? search.risk.toUpperCase() : undefined;
+    return raw === "HIGH" || raw === "MEDIUM" || raw === "LOW" ? { risk: raw } : {};
+  },
   head: () => ({
     meta: [
       { title: "Assets at Risk — Flood Impact Assessment | National Grid" },
