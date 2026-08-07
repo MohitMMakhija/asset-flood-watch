@@ -44,6 +44,13 @@
   --color-layer-substation: var(--layer-substation);
   --color-layer-ohl: var(--layer-ohl);
   --color-layer-cable: var(--layer-cable);
+  --color-brand: var(--brand);
+  --color-brand-mid: var(--brand-mid);
+  --color-brand-light: var(--brand-light);
+  --color-border-info: var(--border-info);
+  --color-border-warn: var(--border-warn);
+  --color-border-critical: var(--border-critical);
+  --color-border-neutral: var(--border-neutral);
   --font-sans: "Inter", "Segoe UI", Roboto, Arial, ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
 }
