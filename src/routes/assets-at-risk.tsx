@@ -36,10 +36,16 @@ const riskOptions: (RiskLevel | "all")[] = ["all", "HIGH", "MEDIUM", "LOW"];
 function AssetsAtRiskPage() {
   const { data, zoomToSelection, floodFilter, setFloodFilter } = useGis();
   const navigate = useNavigate();
+  const search = Route.useSearch();
   const [query, setQuery] = useState("");
   const [type, setType] = useState<AssetKind | "all">("all");
-  const [risk, setRisk] = useState<RiskLevel | "all">("all");
+  const [risk, setRisk] = useState<RiskLevel | "all">(search.risk ?? "all");
   const [flood, setFlood] = useState("all");
+
+  // Drill-down from the dashboard: pre-filter to the requested risk level.
+  useEffect(() => {
+    if (search.risk) setRisk(search.risk);
+  }, [search.risk]);
 
   // Drill-down from the map: pre-filter to the selected Flood Warning Area.
   useEffect(() => {
@@ -50,6 +56,7 @@ function AssetsAtRiskPage() {
     setFloodFilter(null);
     setFlood("all");
   };
+
 
 
   const atRisk = useMemo(() => {
