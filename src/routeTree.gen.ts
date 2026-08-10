@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AssetsAtRiskRouteImport } from './routes/assets-at-risk'
+import { Route as FutureAiEnhancementsRouteImport } from './routes/future-ai-enhancements'
 import { Route as MapRouteImport } from './routes/map'
 
 const IndexRoute = IndexRouteImport.update({
@@ -29,6 +30,11 @@ const AssetsAtRiskRoute = AssetsAtRiskRouteImport.update({
   path: '/assets-at-risk',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FutureAiEnhancementsRoute = FutureAiEnhancementsRouteImport.update({
+  id: '/future-ai-enhancements',
+  path: '/future-ai-enhancements',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MapRoute = MapRouteImport.update({
   id: '/map',
   path: '/map',
@@ -39,12 +45,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/assets-at-risk': typeof AssetsAtRiskRoute
+  '/future-ai-enhancements': typeof FutureAiEnhancementsRoute
   '/map': typeof MapRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/assets-at-risk': typeof AssetsAtRiskRoute
+  '/future-ai-enhancements': typeof FutureAiEnhancementsRoute
   '/map': typeof MapRoute
 }
 export interface FileRoutesById {
@@ -52,20 +60,29 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/assets-at-risk': typeof AssetsAtRiskRoute
+  '/future-ai-enhancements': typeof FutureAiEnhancementsRoute
   '/map': typeof MapRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/assets-at-risk' | '/map'
+  fullPaths:
+    '/' | '/about' | '/assets-at-risk' | '/future-ai-enhancements' | '/map'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/assets-at-risk' | '/map'
-  id: '__root__' | '/' | '/about' | '/assets-at-risk' | '/map'
+  to: '/' | '/about' | '/assets-at-risk' | '/future-ai-enhancements' | '/map'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/assets-at-risk'
+    | '/future-ai-enhancements'
+    | '/map'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AssetsAtRiskRoute: typeof AssetsAtRiskRoute
+  FutureAiEnhancementsRoute: typeof FutureAiEnhancementsRoute
   MapRoute: typeof MapRoute
 }
 
@@ -92,6 +109,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AssetsAtRiskRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/future-ai-enhancements': {
+      id: '/future-ai-enhancements'
+      path: '/future-ai-enhancements'
+      fullPath: '/future-ai-enhancements'
+      preLoaderRoute: typeof FutureAiEnhancementsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/map': {
       id: '/map'
       path: '/map'
@@ -106,6 +130,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AssetsAtRiskRoute: AssetsAtRiskRoute,
+  FutureAiEnhancementsRoute: FutureAiEnhancementsRoute,
   MapRoute: MapRoute,
 }
 export const routeTree = rootRouteImport
