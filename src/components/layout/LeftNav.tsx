@@ -1,12 +1,14 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, Map, AlertTriangle, Info } from "lucide-react";
+import { LayoutDashboard, Map, AlertTriangle, Info, Sparkles } from "lucide-react";
 
 const items = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard },
   { to: "/map", label: "Map", icon: Map },
   { to: "/assets-at-risk", label: "Assets at Risk", icon: AlertTriangle },
   { to: "/about", label: "About", icon: Info },
+  { to: "/future-ai-enhancements", label: "Future AI Enhancements", icon: Sparkles },
 ] as const;
+
 
 export function LeftNav() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
