@@ -2,7 +2,9 @@ import { ChevronLeft, ChevronRight, ChevronsRight, Crosshair, Info, MapPin } fro
 import { useState } from "react";
 
 import { RiskBadge } from "@/components/common/RiskBadge";
+import { AssetRiskInsightAction } from "@/components/panel/AssetRiskInsight";
 import { FloodImpactSummary } from "@/components/panel/FloodImpactSummary";
+
 
 import { KIND_LABEL, type AssetFeature, type AssetKind } from "@/lib/gis/types";
 import { useGis } from "@/state/gis-store";
