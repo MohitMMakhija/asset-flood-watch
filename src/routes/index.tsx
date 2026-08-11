@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 
+import { AiSummaryDialog } from "@/components/dashboard/AiSummaryDialog";
 import { useGis } from "@/state/gis-store";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -58,10 +60,11 @@ function Kpi({
         {valueLinkTo ? (
           <Link
             to={valueLinkTo}
-            search={valueLinkSearch}
+            search={valueLinkSearch ?? {}}
             title={valueLinkTitle}
             className="cursor-pointer rounded-sm text-inherit underline-offset-4 hover:text-inherit hover:underline hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
+
             {formatted}
           </Link>
         ) : (
@@ -143,7 +146,11 @@ function Dashboard() {
           Derived from Environment Agency Flood Warning Areas and the National Grid asset register
           using geometric intersection and a {"250"} m proximity buffer.
         </p>
+        <div className="ml-auto">
+          <AiSummaryDialog data={data} />
+        </div>
       </div>
+
 
       <div className="mb-3 grid grid-cols-2 gap-3 md:grid-cols-4">
         <Kpi label="Flood Warning Areas" value={s.floodAreas} tone="primary" />
