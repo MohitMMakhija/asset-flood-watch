@@ -127,11 +127,13 @@ export async function generateRiskSummary(data: GisData | undefined): Promise<Ri
       `${worst[0]} show the highest proportional exposure at ${pct(worst[1], worst[2])} (${n(worst[1])} of ${n(worst[2])}).`,
     );
   }
-  if (hotspots.length > 0) {
+  const top = hotspots[0];
+  if (top) {
     keyRisks.push(
-      `Risk is concentrated around ${hotspots[0].name}, with ${n(hotspots[0].total)} impacted assets.`,
+      `Risk is concentrated around ${top.name}, with ${n(top.total)} impacted assets.`,
     );
   }
+
 
   const recommendedFocus: string[] = [];
   if (s.substationsAtRisk > 0) {
