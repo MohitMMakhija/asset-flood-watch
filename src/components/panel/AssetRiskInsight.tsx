@@ -2,6 +2,7 @@ import { Sparkles } from "lucide-react";
 import { useCallback, useState } from "react";
 
 import { RiskBadge } from "@/components/common/RiskBadge";
+import { AssetContextMap } from "@/components/panel/AssetContextMap";
 import {
   Dialog,
   DialogContent,
@@ -56,7 +57,6 @@ export function AssetRiskInsightAction({ asset }: { asset: AssetProperties }) {
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent
-          overlayClassName="z-[3000]"
           className="z-[3001] flex max-h-[88vh] w-[calc(100vw-2rem)] max-w-3xl flex-col gap-4 overflow-hidden"
         >
           <DialogHeader className="shrink-0">
