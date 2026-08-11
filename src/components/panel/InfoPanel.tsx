@@ -2,7 +2,9 @@ import { ChevronLeft, ChevronRight, ChevronsRight, Crosshair, Info, MapPin } fro
 import { useState } from "react";
 
 import { RiskBadge } from "@/components/common/RiskBadge";
+import { AssetRiskInsightAction } from "@/components/panel/AssetRiskInsight";
 import { FloodImpactSummary } from "@/components/panel/FloodImpactSummary";
+
 
 import { KIND_LABEL, type AssetFeature, type AssetKind } from "@/lib/gis/types";
 import { useGis } from "@/state/gis-store";
@@ -116,6 +118,8 @@ function AssetDetails({ feature }: { feature: AssetFeature }) {
           <span className="text-[11px] text-muted-foreground">within 250 m buffer</span>
         )}
       </div>
+      <AssetRiskInsightAction asset={p} />
+
       <div className="mt-2">
         <Field label="Voltage" value={p.voltage ? `${p.voltage}${/kv/i.test(p.voltage) ? "" : " kV"}` : null} />
         {kind === "ohl" && <Field label="Tower Section" value={p.towers} />}
