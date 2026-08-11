@@ -144,7 +144,11 @@ function Dashboard() {
           Derived from Environment Agency Flood Warning Areas and the National Grid asset register
           using geometric intersection and a {"250"} m proximity buffer.
         </p>
+        <div className="ml-auto">
+          <AiSummaryDialog data={data} />
+        </div>
       </div>
+
 
       <div className="mb-3 grid grid-cols-2 gap-3 md:grid-cols-4">
         <Kpi label="Flood Warning Areas" value={s.floodAreas} tone="primary" />
