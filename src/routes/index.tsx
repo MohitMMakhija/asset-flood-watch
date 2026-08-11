@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 
+import { AiSummaryDialog } from "@/components/dashboard/AiSummaryDialog";
 import { useGis } from "@/state/gis-store";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
