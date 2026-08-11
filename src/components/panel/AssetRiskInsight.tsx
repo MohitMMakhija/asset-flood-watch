@@ -55,8 +55,11 @@ export function AssetRiskInsightAction({ asset }: { asset: AssetProperties }) {
       </button>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-h-[85vh] max-w-lg overflow-auto">
-          <DialogHeader>
+        <DialogContent
+          overlayClassName="z-[3000]"
+          className="z-[3001] flex max-h-[88vh] w-[calc(100vw-2rem)] max-w-3xl flex-col gap-4 overflow-hidden"
+        >
+          <DialogHeader className="shrink-0">
             <DialogTitle className="text-[15px]">✦ AI Risk Insight Preview</DialogTitle>
             <DialogDescription className="text-[11.5px]">
               Future AI capability. This insight is generated locally from the selected asset's
@@ -65,28 +68,80 @@ export function AssetRiskInsightAction({ asset }: { asset: AssetProperties }) {
             </DialogDescription>
           </DialogHeader>
 
-          {busy || !insight ? (
-            <p className="py-6 text-[12.5px] text-muted-foreground">Analysing selected asset data…</p>
-          ) : (
-            <div className="space-y-4">
-              <section>
-                <div className="flex items-center gap-2">
-                  <h3 className="text-[13.5px] font-semibold">{insight.headline}</h3>
-                  {!insight.insufficientData && <RiskBadge risk={insight.risk} />}
+          <div className="grid min-h-0 flex-1 grid-cols-1 gap-4 overflow-y-auto md:grid-cols-[minmax(0,260px)_minmax(0,1fr)]">
+            {/* Supporting context: asset + locator map */}
+            <aside className="order-1 min-w-0 space-y-3 rounded-md border border-border bg-muted/30 p-3">
+              <div>
+                <h3 className="text-[10.5px] font-semibold uppercase tracking-wider text-muted-foreground">
+                  Selected asset
+                </h3>
+                <p className="mt-1 break-words text-[13px] font-semibold">{asset.name}</p>
+                <p className="text-[11.5px] uppercase text-muted-foreground">{asset.kind}</p>
+              </div>
+              <AssetContextMap asset={asset} />
+              <dl className="space-y-1 text-[11.5px]">
+                {asset.voltage && (
+                  <div className="flex justify-between gap-2">
+                    <dt className="text-muted-foreground">Voltage</dt>
+                    <dd className="text-right">{asset.voltage}</dd>
+                  </div>
+                )}
+                {asset.status && (
+                  <div className="flex justify-between gap-2">
+                    <dt className="text-muted-foreground">Status</dt>
+                    <dd className="text-right">{asset.status}</dd>
+                  </div>
+                )}
+                {asset.lat != null && asset.lng != null && (
+                  <div className="flex justify-between gap-2">
+                    <dt className="text-muted-foreground">Location</dt>
+                    <dd className="text-right">
+                      {asset.lat.toFixed(4)}, {asset.lng.toFixed(4)}
+                    </dd>
+                  </div>
+                )}
+                {asset.floodNames.length > 0 && (
+                  <div>
+                    <dt className="text-muted-foreground">Flood warning areas</dt>
+                    <dd className="mt-0.5 break-words">{asset.floodNames.join(", ")}</dd>
+                  </div>
+                )}
+              </dl>
+            </aside>
+
+            {/* Primary focus: the AI insight */}
+            <div className="relative order-2 min-w-0">
+              {busy || !insight ? (
+                <p className="py-6 text-[12.5px] text-muted-foreground">
+                  Analysing selected asset data…
+                </p>
+              ) : (
+                <div className="space-y-4">
+                  <section>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h3 className="text-[13.5px] font-semibold">{insight.headline}</h3>
+                      {!insight.insufficientData && <RiskBadge risk={insight.risk} />}
+                    </div>
+                    <h4 className="mt-2 text-[10.5px] font-semibold uppercase tracking-wider text-muted-foreground">
+                      Risk assessment
+                    </h4>
+                    <p className="mt-1 text-[12.5px] leading-relaxed">{insight.assessment}</p>
+                  </section>
+
+                  <List title="Why this asset is at risk" items={insight.reasons} />
+                  <List title="Recommended focus" items={insight.recommendedFocus} />
+
+                  <p className="border-t border-border pt-2 text-[10.5px] text-muted-foreground">
+                    Generated {new Date(insight.generatedAt).toLocaleString()} · local deterministic
+                    generator · replaceable with Azure-hosted AI processing
+                  </p>
                 </div>
-                <p className="mt-1.5 text-[12.5px] leading-relaxed">{insight.assessment}</p>
-              </section>
-
-              <List title="Why this asset is at risk" items={insight.reasons} />
-              <List title="Recommended focus" items={insight.recommendedFocus} />
-
-              <p className="border-t border-border pt-2 text-[10.5px] text-muted-foreground">
-                Generated {new Date(insight.generatedAt).toLocaleString()} · local deterministic
-                generator · replaceable with Azure-hosted AI processing
-              </p>
+              )}
             </div>
-          )}
+          </div>
         </DialogContent>
+      </Dialog>
+
       </Dialog>
     </>
   );
