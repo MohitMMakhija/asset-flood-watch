@@ -141,8 +141,6 @@ export function AssetRiskInsightAction({ asset }: { asset: AssetProperties }) {
           </div>
         </DialogContent>
       </Dialog>
-
-      </Dialog>
     </>
   );
 }
