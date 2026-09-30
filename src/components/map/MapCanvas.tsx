@@ -2,7 +2,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useEffect, useRef } from "react";
 
-import { cartoTileUrl } from "@/config/basemap";
+import { basemapTileUrl, BASEMAP_ATTRIBUTION } from "@/config/basemap";
 import { geometryBounds } from "@/lib/gis/data";
 import type { AssetFeature, AssetKind, AssetProperties, RiskLevel } from "@/lib/gis/types";
 import { useGis } from "@/state/gis-store";
@@ -108,15 +108,9 @@ export function MapCanvas() {
     mapRef.current = map;
     paletteRef.current = readPalette();
 
-    L.tileLayer(cartoTileUrl("light_nolabels"), {
-      subdomains: "abcd",
+    L.tileLayer(basemapTileUrl(), {
       maxZoom: 19,
-      attribution: "&copy; OpenStreetMap &copy; CARTO",
-    }).addTo(map);
-    L.tileLayer(cartoTileUrl("light_only_labels"), {
-      subdomains: "abcd",
-      maxZoom: 19,
-      pane: "shadowPane",
+      attribution: BASEMAP_ATTRIBUTION,
     }).addTo(map);
 
     L.control.zoom({ position: "topright" }).addTo(map);
