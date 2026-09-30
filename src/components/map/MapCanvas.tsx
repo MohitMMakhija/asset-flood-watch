@@ -2,6 +2,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useEffect, useRef } from "react";
 
+import { cartoTileUrl } from "@/config/basemap";
 import { geometryBounds } from "@/lib/gis/data";
 import type { AssetFeature, AssetKind, AssetProperties, RiskLevel } from "@/lib/gis/types";
 import { useGis } from "@/state/gis-store";
@@ -107,12 +108,12 @@ export function MapCanvas() {
     mapRef.current = map;
     paletteRef.current = readPalette();
 
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png", {
+    L.tileLayer(cartoTileUrl("light_nolabels"), {
       subdomains: "abcd",
       maxZoom: 19,
       attribution: "&copy; OpenStreetMap &copy; CARTO",
     }).addTo(map);
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png", {
+    L.tileLayer(cartoTileUrl("light_only_labels"), {
       subdomains: "abcd",
       maxZoom: 19,
       pane: "shadowPane",
