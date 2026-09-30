@@ -1,5 +1,7 @@
 import { useEffect, useRef } from "react";
 
+import { cartoTileUrl } from "@/config/basemap";
+
 import type { AssetProperties } from "@/lib/gis/types";
 
 /**
@@ -31,7 +33,7 @@ export function AssetContextMap({ asset }: { asset: AssetProperties }) {
         keyboard: false,
         touchZoom: false,
       });
-      L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+      L.tileLayer(cartoTileUrl("light_all"), {
         maxZoom: 19,
       }).addTo(map);
       L.circleMarker([asset.lat!, asset.lng!], {
